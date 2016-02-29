@@ -1,0 +1,34 @@
+apply plugin: 'com.android.model.application'
+
+model {
+    android {
+        compileSdkVersion = 23
+        buildToolsVersion = "23.0.1"
+
+        defaultConfig.with {
+            applicationId = "com.google.sample.benchmarkjni"
+            minSdkVersion.apiLevel = 22
+            targetSdkVersion.apiLevel = 23
+            versionCode = 1
+            versionName = "1.0"
+        }
+    }
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file('proguard-android.txt'))
+        }
+    }
+
+    android.ndk {
+        moduleName = "benchmark-jni"
+        stl = "gnustl_shared"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+}
