@@ -19,6 +19,38 @@ inline double getRandom(double max) {
     return( max * last / IM );
 }
 
+void heapsort(int n, double *ra) {
+    int i, j;
+    int ir = n;
+    int l = (n >> 1) + 1;
+    double rra;
+
+    for (;;) {
+        if (l > 1) {
+            rra = ra[--l];
+        } else {
+            rra = ra[ir];
+            ra[ir] = ra[1];
+            if (--ir == 1) {
+                ra[1] = rra;
+                return;
+            }
+        }
+        i = l;
+        j = l << 1;
+        while (j <= ir) {
+            if (j < ir && ra[j] < ra[j+1]) { ++j; }
+            if (rra < ra[j]) {
+                ra[i] = ra[j];
+                j += (i = j);
+            } else {
+                j = ir + 1;
+            }
+        }
+        ra[i] = rra;
+    }
+}
+
 
 std::vector<int> runSieve(int upperBound){
 
@@ -59,6 +91,10 @@ JNIEXPORT jdouble JNICALL
 Java_com_coffeeintocode_jnibenchmark_MainActivity_getRandom(JNIEnv *env, jobject instance,
         jdouble max);
 
+JNIEXPORT jdoubleArray JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_heapSort(JNIEnv *env, jobject instance,
+                                                                   jint arraysize, jdoubleArray arr_);
+
 #ifdef __cplusplus
 }
 #endif
@@ -82,4 +118,18 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_getRandom(JNIEnv *env, jobject
 
     return getRandom(max);
 
+}
+
+JNIEXPORT jdoubleArray JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_heapSort(JNIEnv *env, jobject instance,
+                                                           jint arraysize, jdoubleArray arr_) {
+    jdouble *arr = env->GetDoubleArrayElements(arr_, NULL);
+
+    heapsort(arraysize, arr);
+    jdoubleArray  sorted = (*env).NewDoubleArray(arraysize);
+    (*env).SetDoubleArrayRegion(sorted,0,arraysize,arr);
+
+    env->ReleaseDoubleArrayElements(arr_, arr, 0);
+
+    return sorted;
 }
