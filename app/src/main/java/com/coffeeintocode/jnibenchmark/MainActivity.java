@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private final Sieve sieve = new Sieve();
+    private final Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         sieveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((TextView) findViewById(R.id.jni_msgView)).setText("Running sieve!");
                 List<String> results = new ArrayList<String>();
                 int[] boundaries = {1, 10, 100, 500 , 1000, 5000, 10000, 20000};
                 for(int i : boundaries) {
@@ -76,29 +77,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Button piButton = (Button) findViewById(R.id.runpi);
-        piButton.setOnClickListener( new View.OnClickListener(){
+        Button randomButton = (Button) findViewById(R.id.runrandom);
+        randomButton.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Log.i("Tag", "Calculating values");
+                Log.i("Tag", "Calculating Random values");
                 List<String> results = new ArrayList<String>();
                 String run = "";
 
-                int[] boundaries = {1, 10, 100, 500 , 1000, 5000};
+                int[] boundaries = {10000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 50000000};
                 for ( int boundary : boundaries) {
-                    for ( int j = 0; j < 50; ++j) {
-                            Log.i("Tag", "Boundary: " + Integer.toString(boundary));
-                            run = "JAVA;" + Integer.toString(boundary) + ";";
-                            long start_java = System.currentTimeMillis();
-
-                            //Call method here
-
-                            long end_java = System.currentTimeMillis();
-                            run = run + Long.toString(end_java - start_java);
-                            results.add(run);
-
+                    Log.i("Tag", "Boundary: " + Integer.toString(boundary));
+                    run = "JAVA;" + Integer.toString(boundary) + ";";
+                    long start_java = System.currentTimeMillis();
+                    for ( int j = 0; j < boundary; ++j) {
+                        random.getRandom(10000.0);
                     }
+                    long end_java = System.currentTimeMillis();
+                    run = run + Long.toString(end_java - start_java);
+                    results.add(run);
+
+                    Log.i("Tag", "Boundary: " + Integer.toString(boundary));
+                    run = "JNI;" + Integer.toString(boundary) + ";";
+                    long start_jni = System.currentTimeMillis();
+                    for ( int j = 0; j < boundary; ++j) {
+                        getRandom(10000.0);
+                    }
+                    long end_jni = System.currentTimeMillis();
+                    run = run + Long.toString(end_jni - start_jni);
+                    results.add(run);
+
                 }
+
                 String listString = "";
 
                 for (String s : results)
@@ -106,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
                     listString += s + "\n";
                 }
 
-                writeToFile(listString, "pi_log.txt");
-                ((TextView) findViewById(R.id.jni_msgView)).setText(" ran!");
+                writeToFile(listString, "random_log.txt");
+                ((TextView) findViewById(R.id.jni_msgView)).setText("Random ran!");
             }
         });
 
@@ -148,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public native int[] runSieve(int upperBound);
 
-
+    public native double getRandom(double max);
 
 
 }
+

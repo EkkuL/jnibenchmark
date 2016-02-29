@@ -9,6 +9,17 @@
 extern "C" {
 #endif
 
+static long IM = 139968;
+static long IA = 3877;
+static long IC = 29573;
+
+inline double getRandom(double max) {
+    static long last = 42;
+    last = (last * IA + IC) % IM;
+    return( max * last / IM );
+}
+
+
 std::vector<int> runSieve(int upperBound){
 
     std::vector<int>primes;
@@ -43,6 +54,11 @@ extern "C" {
 JNIEXPORT jintArray JNICALL
         Java_com_coffeeintocode_jnibenchmark_MainActivity_runSieve(JNIEnv *env,
                                                                       jobject instance, jint upperBound);
+
+JNIEXPORT jdouble JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_getRandom(JNIEnv *env, jobject instance,
+        jdouble max);
+
 #ifdef __cplusplus
 }
 #endif
@@ -58,4 +74,12 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_runSieve(JNIEnv *env,
     (*env).SetIntArrayRegion(primes, 0, vec.size(), (jint * ) &vec[0]);
 
     return primes;
+}
+
+JNIEXPORT jdouble JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_getRandom(JNIEnv *env, jobject instance,
+                                                            jdouble max) {
+
+    return getRandom(max);
+
 }

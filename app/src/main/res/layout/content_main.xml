@@ -38,8 +38,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Run Pi"
-        android:id="@+id/runpi"
+        android:text="Run Random"
+        android:id="@+id/runrandom"
         android:layout_alignBottom="@+id/runsieve"
         android:layout_toEndOf="@+id/runsieve" />
 </RelativeLayout>
