@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/jni_msgView"
-        android:layout_alignParentStart="true"></TableRow>
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableRow"></TableRow>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -51,4 +52,22 @@
         android:id="@+id/runheap"
         android:layout_alignBottom="@+id/runrandom"
         android:layout_toEndOf="@+id/runrandom" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run MatrixMult"
+        android:id="@+id/runmm"
+        android:layout_above="@+id/runsieve"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Heap Size"
+        android:id="@+id/heapsize"
+        android:layout_alignTop="@+id/tableRow"
+        android:layout_alignEnd="@+id/tableRow" />
 </RelativeLayout>

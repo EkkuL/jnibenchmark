@@ -5,6 +5,7 @@
 #include <cstring>
 #include <iostream>
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -74,6 +75,38 @@ std::vector<int> runSieve(int upperBound){
     return primes;
 }
 
+void freematrix(int size, int **m) {
+    while (--size > -1) { free(m[size]); }
+    free(m);
+}
+
+int **mkmatrix(int rows, int cols) {
+    int i, j, count = 1;
+    int **m = (int **) malloc(rows * sizeof(int *));
+    for (i=0; i<rows; i++) {
+        m[i] = (int *) malloc(cols * sizeof(int));
+        for (j=0; j<cols; j++) {
+            m[i][j] = count++;
+        }
+    }
+    return(m);
+}
+
+int **mmult(int rows, int cols, int **m1, int **m2, int **m3) {
+    int i, j, k, val;
+    for (i=0; i<rows; i++) {
+        for (j=0; j<cols; j++) {
+            val = 0;
+            for (k=0; k<cols; k++) {
+                val += m1[i][k] * m2[k][j];
+            }
+            m3[i][j] = val;
+        }
+    }
+    return(m3);
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -95,10 +128,17 @@ JNIEXPORT jdoubleArray JNICALL
         Java_com_coffeeintocode_jnibenchmark_MainActivity_heapSort(JNIEnv *env, jobject instance,
                                                                    jint arraysize, jdoubleArray arr_);
 
+JNIEXPORT void JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_matrixMult(JNIEnv *env, jobject instance,
+                                                                     jint size);
+
+
 #ifdef __cplusplus
 }
 #endif
 
+
+//Implementations
 JNIEXPORT jintArray JNICALL
 Java_com_coffeeintocode_jnibenchmark_MainActivity_runSieve(JNIEnv *env,
                                                                       jobject instance, jint upperBound){
@@ -132,4 +172,18 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_heapSort(JNIEnv *env, jobject 
     env->ReleaseDoubleArrayElements(arr_, arr, 0);
 
     return sorted;
+}
+
+JNIEXPORT void JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_matrixMult(JNIEnv *env, jobject instance,
+                                                             jint size) {
+
+    int **m1 = mkmatrix(size, size);
+    int **m2 = mkmatrix(size, size);
+    int **mm = mkmatrix(size, size);
+
+    mm = mmult(size, size, m1, m2, mm);
+
+
+    return;
 }
