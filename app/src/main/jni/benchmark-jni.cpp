@@ -75,11 +75,6 @@ std::vector<int> runSieve(int upperBound){
     return primes;
 }
 
-void freematrix(int size, int **m) {
-    while (--size > -1) { free(m[size]); }
-    free(m);
-}
-
 int **mkmatrix(int rows, int cols) {
     int i, j, count = 1;
     int **m = (int **) malloc(rows * sizeof(int *));
@@ -104,6 +99,38 @@ int **mmult(int rows, int cols, int **m1, int **m2, int **m3) {
         }
     }
     return(m3);
+}
+
+const char* helloCat(int n){
+    std::string str;
+    size_t capacity = 31;
+    str.reserve(capacity); // as per C-string
+    size_t newLength = 6;
+    for (int i = 0; i < n; i++)
+    {
+        if(newLength > capacity)
+        {
+            capacity *= 2;
+            str.reserve(capacity);
+        }
+        str += "hello\n";
+        newLength += 6;
+    }
+    return str.c_str();
+}
+
+int nestedloop(int n){
+    int a, b, c, d, e, f, x=0;
+
+    for (a=0; a<n; a++)
+        for (b=0; b<n; b++)
+            for (c=0; c<n; c++)
+                for (d=0; d<n; d++)
+                    for (e=0; e<n; e++)
+                        for (f=0; f<n; f++)
+                            x++;
+
+    return(x);
 }
 
 
@@ -131,7 +158,12 @@ JNIEXPORT jdoubleArray JNICALL
 JNIEXPORT void JNICALL
         Java_com_coffeeintocode_jnibenchmark_MainActivity_matrixMult(JNIEnv *env, jobject instance,
                                                                      jint size);
+JNIEXPORT jstring JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_helloCat(JNIEnv *env, jobject instance, jint n);
 
+JNIEXPORT jint JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_nestedloop(JNIEnv *env, jobject instance,
+                                                                     jint n);
 
 #ifdef __cplusplus
 }
@@ -186,4 +218,18 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_matrixMult(JNIEnv *env, jobjec
 
 
     return;
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_helloCat(JNIEnv *env, jobject instance, jint n) {
+
+    return env->NewStringUTF(helloCat(n));
+}
+
+JNIEXPORT jint JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_nestedloop(JNIEnv *env, jobject instance,
+                                                             jint n) {
+
+    return(nestedloop(n));
+
 }

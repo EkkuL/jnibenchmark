@@ -70,4 +70,22 @@
         android:id="@+id/heapsize"
         android:layout_alignTop="@+id/tableRow"
         android:layout_alignEnd="@+id/tableRow" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run strcat"
+        android:id="@+id/runstrcat"
+        android:layout_alignBottom="@+id/runmm"
+        android:layout_toEndOf="@+id/runmm" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run nestedloop"
+        android:id="@+id/runnl"
+        android:layout_above="@+id/runmm"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private final Random random = new Random();
     private final Heapsort heapsort = new Heapsort();
     private final Matrix matrix = new Matrix();
+    private final Strcat strcat = new Strcat();
+    private final Nestedloop nestedloop = new Nestedloop();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     results.add(run);
                 }
 
-                String listString = "";
-
-                for (String s : results)
-                {
-                    listString += s + "\n";
-                }
+                String listString = listToString(results);
 
                 writeToFile(listString, "sieve_log.txt");
                 ((TextView) findViewById(R.id.jni_msgView)).setText("Sieve run!");
@@ -135,12 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Write results to a file
-                String listString = "";
-
-                for (String s : results)
-                {
-                    listString += s + "\n";
-                }
+                String listString = listToString(results);
 
                 writeToFile(listString, "random_log.txt");
                 ((TextView) findViewById(R.id.jni_msgView)).setText("Random ran!");
@@ -185,12 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     results.add(run);
                 }
 
-                String listString = "";
-
-                for (String s : results)
-                {
-                    listString += s + "\n";
-                }
+                String listString = listToString(results);
 
                 writeToFile(listString, "heapsort_log.txt");
                 ((TextView) findViewById(R.id.jni_msgView)).setText("Heapsort ran!");
@@ -244,12 +231,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                String listString = "";
-
-                for (String s : results)
-                {
-                    listString += s + "\n";
-                }
+                String listString = listToString(results);
 
                 writeToFile(listString, "mmult.txt");
                 ((TextView) findViewById(R.id.jni_msgView)).setText("Matrix mult ran!");
@@ -257,6 +239,125 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button sc = (Button) findViewById(R.id.runstrcat);
+        sc.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                List<String> results = new ArrayList<String>();
+                String run = "";
+
+                Log.i("Tag", "Running string concat");
+
+                int[] boundaries = {10000, 50000, 100000, 500000, 1000000};
+
+                for( int boundary : boundaries){
+                    //Create matrices for multiplication
+                    run = "JNI;" + Integer.toString(boundary) + ";";
+                    long run_avg = 0;
+                    Log.i("Tag", "Boundary: " + Integer.toString(boundary));
+
+                    for( int i = 0; i < 10; ++i) {
+                        long start_jni = System.currentTimeMillis();
+
+                        helloCat(boundary);
+
+                        long end_jni = System.currentTimeMillis();
+                        run_avg += end_jni - start_jni;
+                    }
+                    run = run + Long.toString(run_avg/10);
+                    results.add(run);
+                    run = "JAVA;" + Integer.toString(boundary) + ";";
+                    run_avg = 0;
+                    for( int i = 0; i < 10; ++i) {
+
+                        long start_java = System.currentTimeMillis();
+
+                        strcat.helloCat(boundary);
+
+                        long end_java = System.currentTimeMillis();
+                        run_avg += end_java - start_java;
+                    }
+                    run = run + Long.toString(run_avg);
+                    results.add(run);
+
+                }
+
+                String listString = listToString(results);
+                writeToFile(listString, "strcat_log.txt");
+                ((TextView) findViewById(R.id.jni_msgView)).setText("String concat ran!");
+            }
+        });
+
+        Button nl = (Button) findViewById(R.id.runnl);
+        nl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<String> results = new ArrayList<String>();
+                String run = "";
+
+                Log.i("Tag", "Running nested loop");
+
+                int[] boundaries = range(1,27,2);
+
+                for( int boundary : boundaries){
+                    //Create matrices for multiplication
+                    run = "JNI;" + Integer.toString(boundary) + ";";
+                    long run_avg = 0;
+                    Log.i("Tag", "Boundary: " + Integer.toString(boundary));
+
+                    for( int i = 0; i < 10; ++i) {
+                        long start_jni = System.currentTimeMillis();
+
+                        nestedloop(boundary);
+
+                        long end_jni = System.currentTimeMillis();
+                        run_avg += end_jni - start_jni;
+                    }
+                    run = run + Long.toString(run_avg/10);
+                    results.add(run);
+                    run = "JAVA;" + Integer.toString(boundary) + ";";
+                    run_avg = 0;
+                    for( int i = 0; i < 10; ++i) {
+
+                        long start_java = System.currentTimeMillis();
+
+                        nestedloop.run(boundary);
+
+                        long end_java = System.currentTimeMillis();
+                        run_avg += end_java - start_java;
+                    }
+                    run = run + Long.toString(run_avg);
+                    results.add(run);
+
+                }
+
+                String listString = listToString(results);
+                writeToFile(listString, "nestedloop_log.txt");
+                ((TextView) findViewById(R.id.jni_msgView)).setText("Nested loop ran!");
+            }
+
+        });
+    }
+
+    public int[] range(int start, int stop, int step) {
+        int[] range = new int[(stop - start + 1)/step];
+        int index = 0;
+        for (int i = start; i < stop; i += step) {
+            range[index] = i;
+            ++index;
+        }
+        return range;
+    }
+
+
+    private String listToString(List<String> list){
+        String listString = "";
+
+        for (String s : list)
+        {
+            listString += s + "\n";
+        }
+        return listString;
     }
 
     private void writeToFile(String data, String filename) {
@@ -300,8 +401,9 @@ public class MainActivity extends AppCompatActivity {
 
     public native void matrixMult(int size);
 
+    public native String helloCat(int n);
 
+    public native int nestedloop(int n);
 }
-
 
 
