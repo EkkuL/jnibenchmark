@@ -31,9 +31,8 @@
         android:layout_height="wrap_content"
         android:text="Run Sieve"
         android:id="@+id/runsieve"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="72dp" />
+        android:layout_above="@+id/runstrcat"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -41,8 +40,8 @@
         android:layout_height="wrap_content"
         android:text="Run Random"
         android:id="@+id/runrandom"
-        android:layout_alignBottom="@+id/runsieve"
-        android:layout_toEndOf="@+id/runsieve" />
+        android:layout_above="@+id/runheap"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -50,8 +49,8 @@
         android:layout_height="wrap_content"
         android:text="Run heapsort"
         android:id="@+id/runheap"
-        android:layout_alignBottom="@+id/runrandom"
-        android:layout_toEndOf="@+id/runrandom" />
+        android:layout_above="@+id/runacker"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -59,8 +58,8 @@
         android:layout_height="wrap_content"
         android:text="Run MatrixMult"
         android:id="@+id/runmm"
-        android:layout_above="@+id/runsieve"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="56dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -68,7 +67,7 @@
         android:layout_height="wrap_content"
         android:text="Heap Size"
         android:id="@+id/heapsize"
-        android:layout_alignTop="@+id/tableRow"
+        android:layout_alignTop="@+id/runmm"
         android:layout_alignEnd="@+id/tableRow" />
 
     <Button
@@ -77,8 +76,8 @@
         android:layout_height="wrap_content"
         android:text="Run strcat"
         android:id="@+id/runstrcat"
-        android:layout_alignBottom="@+id/runmm"
-        android:layout_toEndOf="@+id/runmm" />
+        android:layout_above="@+id/runrandom"
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -87,5 +86,23 @@
         android:text="Run nestedloop"
         android:id="@+id/runnl"
         android:layout_above="@+id/runmm"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run hash"
+        android:id="@+id/runhash"
+        android:layout_above="@+id/runsieve"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="run ackermann"
+        android:id="@+id/runacker"
+        android:layout_above="@+id/runnl"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

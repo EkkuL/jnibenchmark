@@ -4,7 +4,8 @@
 #include <cmath>
 #include <cstring>
 #include <iostream>
-
+#include <map>
+#include <sstream>
 
 #ifdef __cplusplus
 extern "C" {
@@ -133,6 +134,21 @@ int nestedloop(int n){
     return(x);
 }
 
+void createHash(const char *values[], int size){
+    std::map< int, std::string > hash ;
+    int n = 0;
+    int keys[size];
+    for( int i = 0 ; i < 3 ; i++ )
+    {
+        keys[i] = n;
+        hash[ keys[i] ] = values[i];
+        n += 10;
+    }
+}
+
+unsigned int ackermann(unsigned int m, unsigned int n) {
+    return(m ? (ackermann(m-1,n ? ackermann(m,(n-1)) : 1)) : n+1);
+}
 
 #ifdef __cplusplus
 }
@@ -164,7 +180,12 @@ JNIEXPORT jstring JNICALL
 JNIEXPORT jint JNICALL
         Java_com_coffeeintocode_jnibenchmark_MainActivity_nestedloop(JNIEnv *env, jobject instance,
                                                                      jint n);
-
+JNIEXPORT void JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_createHash(JNIEnv *env, jobject instance, jint n,
+                                                                     jobjectArray values);
+JNIEXPORT jint JNICALL
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_ackermann(JNIEnv *env, jobject instance, jint m,
+                                                                    jint n);
 #ifdef __cplusplus
 }
 #endif
@@ -231,5 +252,31 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_nestedloop(JNIEnv *env, jobjec
                                                              jint n) {
 
     return(nestedloop(n));
+
+}
+
+JNIEXPORT void JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_createHash(JNIEnv *env, jobject instance, jint n,
+                                                             jobjectArray values) {
+
+    const char *strings[n];
+
+    for(int i = 0; i < n; ++i){
+        jstring string = (jstring) env->GetObjectArrayElement(values,i);
+        const char *rawString = env->GetStringUTFChars(string, 0);
+        strings[i] = rawString;
+        env->DeleteLocalRef(string);
+    }
+
+    createHash(strings, n);
+
+
+}
+
+JNIEXPORT jint JNICALL
+Java_com_coffeeintocode_jnibenchmark_MainActivity_ackermann(JNIEnv *env, jobject instance, jint m,
+                                                            jint n) {
+
+    return ackermann(m,n);
 
 }
