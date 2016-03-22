@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sieve {
-    public List<Integer> runSieveJava(int upperBound) {
+    public static List<Integer> runSieveJava(int upperBound) {
 
         List<Integer> primes = new ArrayList<Integer>();
 

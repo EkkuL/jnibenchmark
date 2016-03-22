@@ -7,7 +7,7 @@ model {
 
         defaultConfig.with {
             applicationId = "com.google.sample.benchmarkjni"
-            minSdkVersion.apiLevel = 22
+            minSdkVersion.apiLevel = 21
             targetSdkVersion.apiLevel = 23
             versionCode = 1
             versionName = "1.0"
@@ -23,6 +23,8 @@ model {
     android.ndk {
         moduleName = "benchmark-jni"
         stl = "gnustl_shared"
+        cppFlags.add("-std=c++11")
+
     }
 }
 

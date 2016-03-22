@@ -1,7 +1,7 @@
 package com.coffeeintocode.jnibenchmark;
 
 public class Nestedloop {
-    public static int run(int n){
+    public int run(int n){
         int x = 0;
         for (int a=0; a<n; a++)
             for (int b=0; b<n; b++)

@@ -1,6 +1,5 @@
 package com.coffeeintocode.jnibenchmark;
 
-import android.app.ActivityManager;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -10,29 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.coffeeintocode.jnibenchmark.R;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final Sieve sieve = new Sieve();
-    private final Random random = new Random();
-    private final Heapsort heapsort = new Heapsort();
-    private final Matrix matrix = new Matrix();
     private final Strcat strcat = new Strcat();
-    private final Nestedloop nestedloop = new Nestedloop();
-    private final Hash hash = new Hash();
-    private final Ackermann ackermann = new Ackermann();
+    private final Nestedloop loop = new Nestedloop();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (int j = 0; j < 50; ++j) {
                         long start_java = System.currentTimeMillis();
-                        List<Integer> primes_java = sieve.runSieveJava(boundary);
+                        List<Integer> primes_java = Sieve.runSieveJava(boundary);
                         long end_java = System.currentTimeMillis();
                         run_avg += end_java - start_java;
                     }
@@ -116,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     run = "JAVA;" + Integer.toString(boundary) + ";";
                     long start_java = System.currentTimeMillis();
                     for (int j = 0; j < boundary; ++j) {
-                        random.getRandom(10000.0);
+                        Random.getRandom(10000.0);
                     }
                     long end_java = System.currentTimeMillis();
                     run = run + Long.toString(end_java - start_java);
@@ -156,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int boundary : boundaries) {
                     double[] ar = (double[]) Array.newInstance(double.class, boundary + 1);
                     for (int i = 1; i <= boundary; i++) {
-                        ar[i] = random.getRandom(1.00);
+                        ar[i] = Random.getRandom(1.00);
                     }
 
                     Log.i("Tag", "Boundary: " + Integer.toString(boundary));
@@ -173,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     run = "JAVA;" + Integer.toString(boundary) + ";";
                     long start_java = System.currentTimeMillis();
                     for (int i = 0; i < 10; ++i) {
-                        heapsort.heapsort(boundary, ar);
+                        Heapsort.heapsort(boundary, ar);
                     }
                     long end_java = System.currentTimeMillis();
                     run = run + Long.toString((end_java - start_java) / 10);
@@ -198,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i("Tag", "Running matrix mult");
 
-                int[] boundaries = {10, 50, 100, 500};
+                int[] boundaries = {10, 50, 100, 300, 500};
 
                 for (int boundary : boundaries) {
                     //Create matrices for multiplication
@@ -222,14 +212,14 @@ public class MainActivity extends AppCompatActivity {
 
                         long start_java = System.currentTimeMillis();
 
-                        int[][] m1 = matrix.create(boundary);
-                        int[][] m2 = matrix.create(boundary);
-                        matrix.multiplication(boundary, m1, m2);
+                        int[][] m1 = Matrix.create(boundary);
+                        int[][] m2 = Matrix.create(boundary);
+                        Matrix.multiplication(boundary, m1, m2);
 
                         long end_java = System.currentTimeMillis();
                         run_avg += end_java - start_java;
                     }
-                    run = run + Long.toString(run_avg);
+                    run = run + Long.toString(run_avg / 10);
                     results.add(run);
 
                 }
@@ -259,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                     long run_avg = 0;
                     Log.i("Tag", "Boundary: " + Integer.toString(boundary));
 
-                    for (int i = 0; i < 10; ++i) {
+                    for (int i = 0; i < 50; ++i) {
                         long start_jni = System.currentTimeMillis();
 
                         helloCat(boundary);
@@ -267,11 +257,11 @@ public class MainActivity extends AppCompatActivity {
                         long end_jni = System.currentTimeMillis();
                         run_avg += end_jni - start_jni;
                     }
-                    run = run + Long.toString(run_avg / 10);
+                    run = run + Long.toString(run_avg / 50);
                     results.add(run);
                     run = "JAVA;" + Integer.toString(boundary) + ";";
                     run_avg = 0;
-                    for (int i = 0; i < 10; ++i) {
+                    for (int i = 0; i < 50; ++i) {
 
                         long start_java = System.currentTimeMillis();
 
@@ -280,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                         long end_java = System.currentTimeMillis();
                         run_avg += end_java - start_java;
                     }
-                    run = run + Long.toString(run_avg);
+                    run = run + Long.toString(run_avg/50);
                     results.add(run);
 
                 }
@@ -324,12 +314,12 @@ public class MainActivity extends AppCompatActivity {
 
                         long start_java = System.currentTimeMillis();
 
-                        nestedloop.run(boundary);
+                        loop.run(boundary);
 
                         long end_java = System.currentTimeMillis();
                         run_avg += end_java - start_java;
                     }
-                    run = run + Long.toString(run_avg);
+                    run = run + Long.toString(run_avg / 10);
                     results.add(run);
 
                 }
@@ -350,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i("Tag", "Running hash");
 
-                int[] boundaries = range(1000, 50000, 1000);
+                int[] boundaries = range(1000, 50000, 3000);
 
                 for (int boundary : boundaries) {
 
@@ -366,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                     long run_avg = 0;
                     Log.i("Tag", "Boundary: " + Integer.toString(boundary));
 
-                    for (int i = 0; i < 10; ++i) {
+                    for (int i = 0; i < 50; ++i) {
                         long start_jni = System.currentTimeMillis();
 
                         createHash( boundary, values);
@@ -374,20 +364,20 @@ public class MainActivity extends AppCompatActivity {
                         long end_jni = System.currentTimeMillis();
                         run_avg += end_jni - start_jni;
                     }
-                    run = run + Long.toString(run_avg / 10);
+                    run = run + Long.toString(run_avg / 50);
                     results.add(run);
                     run = "JAVA;" + Integer.toString(boundary) + ";";
                     run_avg = 0;
-                    for (int i = 0; i < 10; ++i) {
+                    for (int i = 0; i < 50; ++i) {
 
                         long start_java = System.currentTimeMillis();
 
-                        hash.createHash(boundary, values);
+                        Hash.createHash(boundary, values);
 
                         long end_java = System.currentTimeMillis();
                         run_avg += end_java - start_java;
                     }
-                    run = run + Long.toString(run_avg);
+                    run = run + Long.toString(run_avg / 50);
                     results.add(run);
 
                 }
@@ -398,55 +388,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button ackerb = (Button) findViewById(R.id.runacker);
-        ackerb.setOnClickListener(new View.OnClickListener() {
+        Button runfibo = (Button) findViewById(R.id.runfibo);
+        runfibo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<String> results = new ArrayList<String>();
                 String run = "";
 
-                Log.i("Tag", "Running Ackermann");
+                Log.i("Tag", "Running Fibonacci");
 
-                int[] boundaries1 = range(1, 10, 1);
-                int[] boundaries2 = range(1, 4, 1);
-                for (int boundary1 : boundaries2) {
-                    for (int boundary2 : boundaries1){
-                    run = "JNI;" + Integer.toString(boundary1) + ";" + Integer.toString(boundary2) + ";";
+
+                int[] boundaries = range(25,65,3);
+                for (int boundary : boundaries) {
+                    run = "JNI;" + Integer.toString(boundary) + ";";
                     long run_avg = 0;
-                    Log.i("Tag", "Boundary: " + Integer.toString(boundary1) + ";" + Integer.toString(boundary2));
+                    Log.i("Tag", "Boundary(JNI): " + Integer.toString(boundary));
 
                     for (int i = 0; i < 10; ++i) {
                         long start_jni = System.currentTimeMillis();
 
-                        ackermann(boundary1, boundary2);
+                        fibonacci(boundary);
 
                         long end_jni = System.currentTimeMillis();
                         run_avg += end_jni - start_jni;
                     }
                     run = run + Long.toString(run_avg / 10);
                     results.add(run);
-                    if(boundary2 < 3) {
-                        run = "JAVA;" + Integer.toString(boundary1) + ";" + Integer.toString(boundary2) + ";";
-                        run_avg = 0;
-                        for (int i = 0; i < 10; ++i) {
+                }
+                boundaries = range(25,42,3);
+                for (int boundary : boundaries) {
+                    run = "JAVA;" + Integer.toString(boundary) + ";";
+                    Log.i("Tag", "Boundary(Java): " + Integer.toString(boundary));
+                    long run_avg = 0;
+                    for (int i = 0; i < 10; ++i) {
 
-                            long start_java = System.currentTimeMillis();
+                        long start_java = System.currentTimeMillis();
 
-                            ackermann.ack(BigInteger.valueOf(boundary1), BigInteger.valueOf(boundary2));
-
-                            long end_java = System.currentTimeMillis();
-                            run_avg += end_java - start_java;
-                        }
-                        run = run + Long.toString(run_avg);
-                        results.add(run);
+                        Fibonacci.fibo(boundary);
+//
+                        long end_java = System.currentTimeMillis();
+                        run_avg += end_java - start_java;
                     }
-                    }
+                    run = run + Long.toString(run_avg / 10);
+                    results.add(run);
 
                 }
 
                 String listString = listToString(results);
-                writeToFile(listString, "ackermann_log.txt");
-                ((TextView) findViewById(R.id.jni_msgView)).setText("Ackermann ran!");
+                writeToFile(listString, "fibo_log.txt");
+                ((TextView) findViewById(R.id.jni_msgView)).setText("Fibonacci ran!");
             }
         });
 
@@ -505,6 +495,7 @@ public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("benchmark-jni");
     }
+
     public native int[] runSieve(int upperBound);
 
     public native double getRandom(double max);
@@ -519,6 +510,6 @@ public class MainActivity extends AppCompatActivity {
 
     public native void createHash(int n, String[] values);
 
-    public native int ackermann(int m, int n);
+    public native int fibonacci(int n);
 }
 

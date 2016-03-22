@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <unordered_map>
 
 #ifdef __cplusplus
 extern "C" {
@@ -135,7 +136,8 @@ int nestedloop(int n){
 }
 
 void createHash(const char *values[], int size){
-    std::map< int, std::string > hash ;
+    std::unordered_map<int, std::string> hash;
+
     int n = 0;
     int keys[size];
     for( int i = 0 ; i < 3 ; i++ )
@@ -146,8 +148,8 @@ void createHash(const char *values[], int size){
     }
 }
 
-unsigned int ackermann(unsigned int m, unsigned int n) {
-    return(m ? (ackermann(m-1,n ? ackermann(m,(n-1)) : 1)) : n+1);
+long long fibo(long long a, long long b, int n) {
+    return (--n>0)?(fibo(b, a+b, n)):(a);
 }
 
 #ifdef __cplusplus
@@ -183,9 +185,11 @@ JNIEXPORT jint JNICALL
 JNIEXPORT void JNICALL
         Java_com_coffeeintocode_jnibenchmark_MainActivity_createHash(JNIEnv *env, jobject instance, jint n,
                                                                      jobjectArray values);
+
 JNIEXPORT jint JNICALL
-        Java_com_coffeeintocode_jnibenchmark_MainActivity_ackermann(JNIEnv *env, jobject instance, jint m,
+        Java_com_coffeeintocode_jnibenchmark_MainActivity_fibonacci(JNIEnv *env, jobject instance,
                                                                     jint n);
+
 #ifdef __cplusplus
 }
 #endif
@@ -273,10 +277,10 @@ Java_com_coffeeintocode_jnibenchmark_MainActivity_createHash(JNIEnv *env, jobjec
 
 }
 
+
 JNIEXPORT jint JNICALL
-Java_com_coffeeintocode_jnibenchmark_MainActivity_ackermann(JNIEnv *env, jobject instance, jint m,
+Java_com_coffeeintocode_jnibenchmark_MainActivity_fibonacci(JNIEnv *env, jobject instance,
                                                             jint n) {
 
-    return ackermann(m,n);
-
+    return((jint) fibo(0,1,n));
 }

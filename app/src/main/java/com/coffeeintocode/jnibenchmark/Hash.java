@@ -5,7 +5,7 @@ import android.util.SparseArray;
 import java.util.HashMap;
 
 public class Hash{
-    public void createHash(int length, String[] values){
+    public static void createHash(int length, String[] values){
         Integer[] keys = new Integer[length];
         int index = 10;
 

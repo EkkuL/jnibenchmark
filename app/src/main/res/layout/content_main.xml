@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:text="Run heapsort"
         android:id="@+id/runheap"
-        android:layout_above="@+id/runacker"
+        android:layout_above="@+id/runfibo"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -101,8 +101,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="run ackermann"
-        android:id="@+id/runacker"
+        android:text="run fibonacci"
+        android:id="@+id/runfibo"
         android:layout_above="@+id/runnl"
         android:layout_alignParentStart="true" />
 </RelativeLayout>
